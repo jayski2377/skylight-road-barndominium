@@ -1,0 +1,729 @@
+<title>Skylight Road Barndominium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#FBFAF7; --surface:#FFFFFF; --sunken:#F3F1EB;
+  --ink:#22252A; --ink2:#5A6069; --ink3:#8C9299;
+  --line:#D7D8D2; --rule:#C2C4BE;
+  --oxide:#B04A26; --oxide-soft:#F0DED4;
+  --glass:#3E7386; --glass-soft:#D9E7EC;
+  --field:#F4F2EC; --deck:#EFE7D6; --deckline:#C9B98F;
+  --wall:#24272B; --part:#4A4E54;
+  --shadow:0 1px 2px rgba(30,26,20,.05),0 8px 24px -12px rgba(30,26,20,.16);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#131518; --surface:#1B1E22; --sunken:#101215;
+  --ink:#E9E8E3; --ink2:#A7ACB3; --ink3:#767C84;
+  --line:#31363C; --rule:#3D434A;
+  --oxide:#E0794C; --oxide-soft:#3C2317;
+  --glass:#7FB2C6; --glass-soft:#1C2E35;
+  --field:#1D2126; --deck:#26221B; --deckline:#4A422F;
+  --wall:#CBCFD4; --part:#8B9199;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.7);
+}}
+:root[data-theme="dark"]{
+  --paper:#131518; --surface:#1B1E22; --sunken:#101215;
+  --ink:#E9E8E3; --ink2:#A7ACB3; --ink3:#767C84;
+  --line:#31363C; --rule:#3D434A;
+  --oxide:#E0794C; --oxide-soft:#3C2317;
+  --glass:#7FB2C6; --glass-soft:#1C2E35;
+  --field:#1D2126; --deck:#26221B; --deckline:#4A422F;
+  --wall:#CBCFD4; --part:#8B9199;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:1180px;margin:0 auto;padding:40px 24px 80px;display:flex;flex-direction:column;gap:40px}
+
+header{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end;justify-content:space-between;
+  border-bottom:2px solid var(--ink);padding-bottom:18px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--oxide);font-weight:500;margin-bottom:8px}
+h1{font-family:Archivo,system-ui,sans-serif;font-weight:700;font-size:clamp(30px,5vw,46px);
+  line-height:1.02;margin:0;letter-spacing:-.02em;text-wrap:balance}
+.sub{color:var(--ink2);font-size:14px;margin-top:8px;max-width:52ch}
+.keyfacts{display:flex;gap:0;flex-wrap:wrap;border:1px solid var(--rule);background:var(--surface)}
+.kf{padding:10px 18px;border-right:1px solid var(--rule)}
+.kf:last-child{border-right:0}
+.kf span{display:block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink3)}
+.kf b{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+
+section{display:flex;flex-direction:column;gap:16px}
+h2{font-family:Archivo,sans-serif;font-weight:600;font-size:13px;letter-spacing:.16em;
+  text-transform:uppercase;margin:0;color:var(--ink);display:flex;align-items:center;gap:14px}
+h2::after{content:"";flex:1;height:1px;background:var(--rule)}
+
+.drawing{background:var(--surface);border:1px solid var(--rule);box-shadow:var(--shadow);
+  padding:18px;overflow-x:auto}
+.drawing svg{display:block;width:100%;height:auto;min-width:640px}
+.elev svg{min-width:520px;max-width:820px;margin:0 auto}
+
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+th{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink3);font-weight:500;text-align:left;padding:11px 16px;border-bottom:1px solid var(--rule);
+  background:var(--sunken);white-space:nowrap}
+td{padding:10px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.tag{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--oxide);white-space:nowrap}
+td.name{font-weight:600}
+tr.total td{background:var(--sunken);font-weight:600;border-top:2px solid var(--ink)}
+tr.zone td{background:transparent;color:var(--ink2);font-size:13px}
+tr.zone td.name{font-weight:400;padding-left:32px}
+tr.zone td.name::before{content:"\2514 ";color:var(--ink3)}
+tr.grp td{background:var(--sunken);font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);padding:7px 16px}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px}
+
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:2px;
+  background:var(--rule);border:1px solid var(--rule)}
+.note{background:var(--surface);padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.note p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.55}
+.note .flag{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--oxide)}
+.note.warn{background:var(--oxide-soft)}
+.note.warn p{color:var(--ink)}
+
+.rev{border-left:3px solid var(--oxide);background:var(--surface);border-top:1px solid var(--rule);
+  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:16px 20px}
+.rev ol{margin:8px 0 0;padding-left:20px;font-size:13.5px;color:var(--ink2);line-height:1.6}
+.rev li{margin-bottom:5px}
+.rev b{color:var(--ink)}
+
+.titleblock{border:2px solid var(--ink);background:var(--surface);display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.tb{padding:12px 16px;border-right:1px solid var(--rule)}
+.tb:last-child{border-right:0}
+.tb span{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:3px}
+.tb b{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:500}
+.disclaimer{font-size:12.5px;color:var(--ink3);line-height:1.55;max-width:76ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink2)}
+.legend i{display:inline-block;width:22px;height:8px;margin-right:7px;vertical-align:middle;border-radius:1px}
+</style>
+
+<div class="sheet">
+
+<header>
+  <div>
+    <div class="eyebrow">Skylight Rd &middot; Salem, IN 47167 &middot; Aulbach Lot #10 &middot; Rev 6</div>
+    <h1>40&times;40 Barndominium</h1>
+    <p class="sub">Three bedroom, two bath, stair to a future upper level. Two 12-foot four-panel sliders in the back wall, flanked by pairs of tall 24&Prime; windows that turn both corners onto the east and west walls.</p>
+  </div>
+  <div class="keyfacts">
+    <div class="kf"><span>Footprint</span><b>40&#8242;-0&Prime; sq</b></div>
+    <div class="kf"><span>Main level</span><b>1,600 sf</b></div>
+    <div class="kf"><span>Windows</span><b>19 + 2 doors</b></div>
+    <div class="kf"><span>Glazing</span><b>388 sf &middot; 24%</b></div>
+  </div>
+</header>
+
+<div class="rev">
+  <div class="eyebrow" style="margin:0">Changed in this revision</div>
+  <ol>
+    <li><b>A pair of 24&Prime;&times;72&Prime; windows at each end of the back wall</b> instead of one. The 7&#8242;-6&Prime; between the corner and each door takes both: 1&#8242;-6&Prime; corner return, window, 1&#8242;-0&Prime;, window, 1&#8242;-0&Prime; of jamb. The doors do not move.</li>
+    <li><b>Three more 24&Prime;&times;72&Prime; turning each corner</b> onto the east and west walls, heads aligned with everything else at 80&Prime;.</li>
+    <li><b>A 72&Prime;&times;24&Prime; laid horizontally at the stair</b>, west wall, sill 56&Prime; &mdash; it runs from the stair's bottom riser and dies exactly into the bedroom partition.</li>
+    <li><b>One high 72&Prime;&times;24&Prime; on the south wall of bedroom 3</b>, sill 56&Prime;. It is decoration, not egress &mdash; the west window still carries that.</li>
+    <li><b>Three in the master on the east wall</b> &mdash; two 24&Prime;&times;72&Prime; flanking a bigger <b>36&Prime;&times;72&Prime; double-hung that slides up</b>. The middle one is the master's egress at 7.3 sf net clear.</li>
+    <li><b>Consequence:</b> the east-wall trio lands where the kitchen sink run was. The run is cut back to 5&#8242;-2&Prime; and the sink slid south &mdash; it no longer sits under a window.</li>
+  </ol>
+</div>
+
+<section>
+  <h2>Floor Plan &mdash; Main Level</h2>
+  <div class="drawing">
+  <svg viewBox="-112 -248 704 916" xmlns="http://www.w3.org/2000/svg" role="img"
+       aria-label="Dimensioned main level floor plan of a 40 by 40 foot barndominium">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7.5" refY="3" orient="auto">
+        <path d="M0,0 L7.5,3 L0,6 Z" fill="var(--oxide)"/></marker>
+      <marker id="sl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+        <path d="M0,0 L7,3 L0,6 Z" fill="var(--glass)"/></marker>
+      <pattern id="hatch" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="7" stroke="var(--deckline)" stroke-width="1.1"/></pattern>
+    </defs>
+
+    <!-- ===== COVERED BACK DECK ===== -->
+    <g>
+      <rect x="0" y="-144" width="480" height="144" fill="var(--deck)" stroke="var(--deckline)" stroke-width="1.5"/>
+      <rect x="0" y="-144" width="480" height="144" fill="url(#hatch)" opacity=".55"/>
+      <g fill="var(--deckline)">
+        <rect x="0" y="-152" width="10" height="10"/><rect x="470" y="-152" width="10" height="10"/>
+        <rect x="117" y="-152" width="10" height="10"/><rect x="235" y="-152" width="10" height="10"/><rect x="353" y="-152" width="10" height="10"/>
+      </g>
+      <text x="240" y="-128" text-anchor="middle" font-family="Archivo,sans-serif" font-size="15" font-weight="600" fill="var(--ink2)" letter-spacing="1.2">COVERED BACK DECK</text>
+      <text x="240" y="-112" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11.5" fill="var(--ink3)">40&#8242;-0&Prime; &times; 12&#8242;-0&Prime; &middot; 480 sf</text>
+      <text x="240" y="-96" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink3)">&#8593; NORTH &mdash; open acreage, grade rises</text>
+    </g>
+
+    <!-- ===== FLOOR FIELD + SHELL ===== -->
+    <rect x="8" y="8" width="464" height="464" fill="var(--field)"/>
+    <rect x="4" y="4" width="472" height="472" fill="none" stroke="var(--wall)" stroke-width="8"/>
+
+    <!-- ===== NORTH WALL: W1 W2 | D1 | D2 | W3 W4 ===== -->
+    <g fill="var(--field)">
+      <rect x="18" y="0" width="24" height="8"/><rect x="54" y="0" width="24" height="8"/>
+      <rect x="90" y="0" width="144" height="8"/><rect x="246" y="0" width="144" height="8"/>
+      <rect x="402" y="0" width="24" height="8"/><rect x="438" y="0" width="24" height="8"/>
+    </g>
+    <g fill="var(--glass-soft)" stroke="var(--glass)" stroke-width="1.6">
+      <rect x="18" y="1.5" width="24" height="5"/><rect x="54" y="1.5" width="24" height="5"/>
+      <rect x="402" y="1.5" width="24" height="5"/><rect x="438" y="1.5" width="24" height="5"/>
+    </g>
+    <!-- D1: 4 panels @ 36", stacks WEST -->
+    <g stroke="var(--glass)" fill="var(--glass-soft)">
+      <rect x="90" y="1" width="144" height="6" stroke-width="1.6"/>
+      <g stroke-width="1.2"><line x1="126" y1="1" x2="126" y2="7"/><line x1="162" y1="1" x2="162" y2="7"/><line x1="198" y1="1" x2="198" y2="7"/></g>
+      <g stroke-width="1.3" fill="none"><line x1="196" y1="12.5" x2="100" y2="12.5" marker-end="url(#sl)"/></g>
+    </g>
+    <!-- D2: 4 panels @ 36", stacks EAST -->
+    <g stroke="var(--glass)" fill="var(--glass-soft)">
+      <rect x="246" y="1" width="144" height="6" stroke-width="1.6"/>
+      <g stroke-width="1.2"><line x1="282" y1="1" x2="282" y2="7"/><line x1="318" y1="1" x2="318" y2="7"/><line x1="354" y1="1" x2="354" y2="7"/></g>
+      <g stroke-width="1.3" fill="none"><line x1="284" y1="12.5" x2="380" y2="12.5" marker-end="url(#sl)"/></g>
+    </g>
+    <!-- the three 1' engineered posts -->
+    <g fill="var(--oxide)" opacity=".22"><rect x="78" y="0" width="12" height="8"/><rect x="234" y="0" width="12" height="8"/><rect x="390" y="0" width="12" height="8"/></g>
+
+    <!-- callouts on the deck -->
+    <g font-family="IBM Plex Mono,monospace" font-size="10.5" fill="var(--oxide)" text-anchor="middle" font-weight="600">
+      <text x="162" y="-32">D1 &middot; 144&Prime;&times;80&Prime;</text><text x="318" y="-32">D2 &middot; 144&Prime;&times;80&Prime;</text>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="9" fill="var(--ink3)" text-anchor="middle">
+      <text x="162" y="-20">4-panel &#8592; stacks W</text><text x="318" y="-20">stacks E &#8594; 4-panel</text>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--glass)" text-anchor="middle">
+      <text x="30" y="-46">W1</text><text x="66" y="-46">W2</text><text x="414" y="-46">W3</text><text x="450" y="-46">W4</text>
+    </g>
+
+    <!-- ===== WEST / EAST / SOUTH WINDOWS ===== -->
+    <g fill="var(--field)">
+      <rect x="0" y="20" width="8" height="24"/><rect x="0" y="56" width="8" height="24"/><rect x="0" y="92" width="8" height="24"/>
+      <rect x="0" y="140" width="8" height="72"/>
+      <rect x="0" y="258" width="8" height="48"/><rect x="0" y="400" width="8" height="48"/>
+      <rect x="472" y="20" width="8" height="24"/><rect x="472" y="56" width="8" height="24"/><rect x="472" y="92" width="8" height="24"/>
+      <rect x="472" y="232" width="8" height="24"/><rect x="472" y="268" width="8" height="36"/><rect x="472" y="316" width="8" height="24"/>
+      <rect x="40" y="472" width="72" height="8"/><rect x="228" y="472" width="36" height="8"/><rect x="330" y="472" width="24" height="8"/>
+    </g>
+    <g fill="var(--glass-soft)" stroke="var(--glass)" stroke-width="1.5">
+      <rect x="1.5" y="20" width="5" height="24"/><rect x="1.5" y="56" width="5" height="24"/><rect x="1.5" y="92" width="5" height="24"/>
+      <rect x="1.5" y="140" width="5" height="72"/>
+      <rect x="1.5" y="258" width="5" height="48"/><rect x="1.5" y="400" width="5" height="48"/>
+      <rect x="473.5" y="20" width="5" height="24"/><rect x="473.5" y="56" width="5" height="24"/><rect x="473.5" y="92" width="5" height="24"/>
+      <rect x="473.5" y="232" width="5" height="24"/><rect x="473.5" y="316" width="5" height="24"/>
+      <rect x="40" y="473.5" width="72" height="5"/><rect x="228" y="473.5" width="36" height="5"/><rect x="330" y="473.5" width="24" height="5"/>
+    </g>
+    <!-- master double-hung drawn with its two sashes -->
+    <g fill="var(--glass-soft)" stroke="var(--glass)" stroke-width="1.5">
+      <rect x="473.5" y="268" width="5" height="36"/>
+    </g>
+    <line x1="472" y1="286" x2="480" y2="286" stroke="var(--glass)" stroke-width="1.2"/>
+    <g font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--glass)">
+      <text x="-6" y="35" text-anchor="end">W5</text><text x="-6" y="71" text-anchor="end">W6</text><text x="-6" y="107" text-anchor="end">W7</text>
+      <text x="-6" y="179" text-anchor="end">W8 horiz</text>
+      <text x="-6" y="286" text-anchor="end">W9 egr</text><text x="-6" y="428" text-anchor="end">W10 egr</text>
+      <text x="486" y="35">W14</text><text x="486" y="71">W15</text><text x="486" y="107">W16</text>
+      <text x="486" y="247">W17</text><text x="486" y="290">W18 egr</text><text x="486" y="334">W19</text>
+    </g>
+
+    <!-- ===== FRONT DOOR: hinged WEST ===== -->
+    <rect x="172" y="472" width="36" height="8" fill="var(--field)"/>
+    <path d="M172,436 A36,36 0 0,1 208,472" stroke="var(--oxide)" stroke-width="1.6" fill="none"/>
+    <line x1="172" y1="472" x2="172" y2="436" stroke="var(--part)" stroke-width="1.8"/>
+    <text x="190" y="466" font-family="IBM Plex Mono,monospace" font-size="8.5" fill="var(--oxide)" text-anchor="middle">D3</text>
+
+    <!-- ===== INTERIOR PARTITIONS ===== -->
+    <g stroke="var(--part)" stroke-width="5" stroke-linecap="butt">
+      <line x1="8" y1="214.5" x2="169" y2="214.5"/><line x1="211" y1="214.5" x2="472" y2="214.5"/>
+      <line x1="166.5" y1="212" x2="166.5" y2="230"/><line x1="166.5" y1="262" x2="166.5" y2="356"/><line x1="166.5" y1="388" x2="166.5" y2="472"/>
+      <line x1="8" y1="348.5" x2="169" y2="348.5"/>
+      <line x1="213.5" y1="265" x2="213.5" y2="300"/><line x1="213.5" y1="332" x2="213.5" y2="400"/><line x1="213.5" y1="432" x2="213.5" y2="472"/>
+      <line x1="211" y1="267.5" x2="291" y2="267.5"/>
+      <line x1="288.5" y1="212" x2="288.5" y2="225"/><line x1="288.5" y1="261" x2="288.5" y2="472"/>
+      <line x1="213.5" y1="368.5" x2="291" y2="368.5"/>
+      <line x1="286" y1="357.5" x2="324" y2="357.5"/><line x1="356" y1="357.5" x2="408" y2="357.5"/><line x1="440" y1="357.5" x2="472" y2="357.5"/>
+    </g>
+    <line x1="396" y1="355" x2="396" y2="472" stroke="var(--part)" stroke-width="6" stroke-linecap="butt"/>
+    <text x="404" y="466" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="var(--oxide)">2&times;6</text>
+
+    <!-- ===== DOOR SWINGS + LEAVES ===== -->
+    <g stroke="var(--oxide)" stroke-width="1.1" fill="none" opacity=".85">
+      <path d="M134,230 A32,32 0 0,0 166,262"/>
+      <path d="M134,388 A32,32 0 0,1 166,356"/>
+      <path d="M324,225 A36,36 0 0,1 288,261"/>
+      <path d="M245,300 A32,32 0 0,1 213,332"/>
+    </g>
+    <g stroke="var(--part)" stroke-width="1.8" fill="none">
+      <line x1="166" y1="230" x2="134" y2="230"/><line x1="166" y1="388" x2="134" y2="388"/>
+      <line x1="288" y1="225" x2="324" y2="225"/><line x1="213" y1="300" x2="245" y2="300"/>
+    </g>
+    <g stroke="var(--oxide)" stroke-width="1.4" fill="none" stroke-dasharray="5 3">
+      <line x1="213.5" y1="434" x2="213.5" y2="466"/>
+      <line x1="356" y1="357.5" x2="390" y2="357.5"/>
+      <line x1="440" y1="357.5" x2="470" y2="357.5"/>
+    </g>
+    <g stroke="var(--part)" stroke-width="1.8" fill="none">
+      <line x1="213.5" y1="400" x2="213.5" y2="432"/>
+      <line x1="324" y1="357.5" x2="356" y2="357.5"/><line x1="408" y1="357.5" x2="440" y2="357.5"/>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="7" fill="var(--oxide)">
+      <text x="208" y="424" text-anchor="end">pocket</text>
+      <text x="340" y="352" text-anchor="middle">pocket</text><text x="454" y="352" text-anchor="middle">pocket</text>
+    </g>
+
+    <!-- ===== STAIR: rises WEST to EAST ===== -->
+    <g>
+      <rect x="14" y="176" width="150" height="36" fill="var(--sunken)" stroke="var(--part)" stroke-width="1.5"/>
+      <g stroke="var(--ink3)" stroke-width="1">
+        <line x1="24" y1="176" x2="24" y2="212"/><line x1="34" y1="176" x2="34" y2="212"/><line x1="44" y1="176" x2="44" y2="212"/>
+        <line x1="54" y1="176" x2="54" y2="212"/><line x1="64" y1="176" x2="64" y2="212"/><line x1="74" y1="176" x2="74" y2="212"/>
+        <line x1="84" y1="176" x2="84" y2="212"/><line x1="94" y1="176" x2="94" y2="212"/><line x1="104" y1="176" x2="104" y2="212"/>
+        <line x1="114" y1="176" x2="114" y2="212"/><line x1="124" y1="176" x2="124" y2="212"/><line x1="134" y1="176" x2="134" y2="212"/>
+        <line x1="144" y1="176" x2="144" y2="212"/><line x1="154" y1="176" x2="154" y2="212"/>
+      </g>
+      <line x1="28" y1="196" x2="150" y2="196" stroke="var(--oxide)" stroke-width="1.4" marker-end="url(#ar)"/>
+      <rect x="60" y="180" width="58" height="11" fill="var(--sunken)"/>
+      <text x="89" y="188" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--oxide)" font-weight="600">UP &middot; 16R</text>
+      <rect x="22" y="201" width="134" height="11" fill="var(--sunken)"/>
+      <text x="89" y="209" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--ink3)">3&#8242;-0&Prime;&times;12&#8242;-6&Prime; TO UPPER LEVEL</text>
+    </g>
+
+    <!-- ===== KITCHEN ===== -->
+    <g stroke="var(--ink3)" stroke-width="1.1" fill="none">
+      <rect x="448" y="128" width="24" height="62" fill="var(--sunken)"/>
+      <rect x="452" y="138" width="16" height="34"/>
+      <rect x="388" y="190" width="84" height="24" fill="var(--sunken)"/>
+      <rect x="392" y="191" width="24" height="22"/>
+      <rect x="430" y="191" width="30" height="22"/>
+      <g stroke-width=".9"><circle cx="438" cy="197" r="2.6"/><circle cx="452" cy="197" r="2.6"/><circle cx="438" cy="207" r="2.6"/><circle cx="452" cy="207" r="2.6"/></g>
+      <rect x="296" y="178" width="48" height="36" fill="var(--sunken)"/>
+      <rect x="348" y="178" width="36" height="36"/>
+      <rect x="330" y="52" width="48" height="88" rx="3" fill="var(--sunken)" stroke-width="1.5"/>
+      <g><circle cx="316" cy="70" r="7"/><circle cx="316" cy="96" r="7"/><circle cx="316" cy="122" r="7"/></g>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="8.5" fill="var(--ink3)">
+      <text x="460" y="155" text-anchor="middle" transform="rotate(90 460 155)">sink</text>
+      <text x="320" y="205" text-anchor="middle">pantry</text><text x="366" y="205" text-anchor="middle">ref</text>
+      <text x="404" y="186" text-anchor="middle" font-size="7">dw</text><text x="445" y="186" text-anchor="middle">range</text>
+      <text x="354" y="96" text-anchor="middle" transform="rotate(90 354 96)">ISLAND 4&#8242;&times;7&#8242;-4&Prime;</text>
+    </g>
+
+    <!-- ===== DINING + LIVING ===== -->
+    <g stroke="var(--ink3)" stroke-width="1.1" fill="none">
+      <rect x="190" y="70" width="72" height="42" rx="2"/>
+      <g><circle cx="206" cy="60" r="7"/><circle cx="226" cy="60" r="7"/><circle cx="246" cy="60" r="7"/>
+         <circle cx="206" cy="122" r="7"/><circle cx="226" cy="122" r="7"/><circle cx="246" cy="122" r="7"/></g>
+      <rect x="40" y="106" width="120" height="32" rx="3" fill="var(--sunken)"/>
+      <rect x="20" y="34" width="34" height="38" rx="3" fill="var(--sunken)"/>
+      <rect x="20" y="80" width="34" height="38" rx="3" fill="var(--sunken)"/>
+      <rect x="70" y="62" width="68" height="28" rx="2"/>
+    </g>
+
+    <!-- ===== BEDS ===== -->
+    <g stroke="var(--ink3)" stroke-width="1.1" fill="var(--sunken)">
+      <rect x="341" y="221" width="78" height="84" rx="2"/><rect x="341" y="221" width="78" height="13" fill="var(--line)"/>
+      <rect x="30" y="221" width="60" height="80" rx="2"/><rect x="30" y="221" width="60" height="13" fill="var(--line)"/>
+      <rect x="30" y="355" width="60" height="80" rx="2"/><rect x="30" y="355" width="60" height="13" fill="var(--line)"/>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--ink3)" text-anchor="middle">
+      <text x="380" y="267">KING 6&#8242;-6&Prime;&times;7&#8242;-0&Prime;</text><text x="60" y="265">QUEEN</text><text x="60" y="399">QUEEN</text>
+    </g>
+
+    <!-- ===== BEDROOM CLOSETS ===== -->
+    <g stroke="var(--ink3)" stroke-width="1.1" fill="none">
+      <rect x="140" y="270" width="24" height="72" fill="var(--sunken)"/>
+      <rect x="140" y="396" width="24" height="72" fill="var(--sunken)"/>
+      <g stroke-width="1.4" stroke="var(--oxide)" opacity=".8">
+        <line x1="140" y1="270" x2="140" y2="306"/><line x1="143" y1="306" x2="143" y2="342"/>
+        <line x1="140" y1="396" x2="140" y2="432"/><line x1="143" y1="432" x2="143" y2="468"/></g>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--ink3)" text-anchor="middle">
+      <text x="152" y="310" transform="rotate(90 152 310)">CL 6&#8242;&times;2&#8242;</text>
+      <text x="152" y="436" transform="rotate(90 152 436)">CL 6&#8242;&times;2&#8242;</text>
+    </g>
+
+    <!-- ===== MASTER BATH ===== -->
+    <g stroke="var(--ink3)" stroke-width="1.1" fill="none">
+      <rect x="385" y="372" width="8" height="20" fill="var(--sunken)"/>
+      <ellipse cx="374" cy="382" rx="11" ry="7"/>
+      <rect x="291" y="404" width="22" height="60" fill="var(--sunken)"/>
+      <circle cx="302" cy="419" r="6"/><circle cx="302" cy="449" r="6"/>
+      <rect x="321" y="424" width="72" height="48" rx="2" fill="var(--glass-soft)" opacity=".5"/>
+      <rect x="321" y="424" width="72" height="48" rx="2"/>
+      <line x1="321" y1="424" x2="393" y2="472"/><line x1="393" y1="424" x2="321" y2="472"/>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="7.5" fill="var(--ink3)" text-anchor="middle">
+      <text x="302" y="437" transform="rotate(90 302 437)">DBL VANITY 5&#8242;</text>
+      <text x="357" y="451">SHOWER 6&#8242;&times;4&#8242;</text>
+    </g>
+
+    <!-- ===== WALK-IN CLOSET ===== -->
+    <g stroke="var(--ink3)" stroke-width="1.3" fill="none">
+      <line x1="404" y1="366" x2="404" y2="464"/><line x1="468" y1="366" x2="468" y2="464"/>
+      <line x1="404" y1="464" x2="468" y2="464"/>
+    </g>
+
+    <!-- ===== BATH 2 ===== -->
+    <g stroke="var(--ink3)" stroke-width="1.1" fill="none">
+      <rect x="216" y="270" width="54" height="22" fill="var(--sunken)"/><circle cx="243" cy="281" r="6"/>
+      <rect x="278" y="300" width="8" height="20" fill="var(--sunken)"/>
+      <ellipse cx="267" cy="310" rx="11" ry="7"/>
+      <rect x="216" y="336" width="60" height="30" rx="3" fill="var(--sunken)"/><ellipse cx="269" cy="351" rx="4" ry="6"/>
+      <rect x="276" y="336" width="10" height="30" fill="var(--sunken)"/>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="7.5" fill="var(--ink3)" text-anchor="middle">
+      <text x="244" y="355">TUB / SHR 5&#8242;</text><text x="281" y="352" transform="rotate(90 281 352)" font-size="6">TOWEL</text>
+    </g>
+
+    <!-- ===== LAUNDRY ===== -->
+    <g stroke="var(--ink3)" stroke-width="1.1" fill="none">
+      <rect x="216" y="371" width="44" height="24" fill="var(--sunken)"/>
+      <circle cx="274" cy="383" r="11" fill="var(--sunken)"/>
+      <rect x="276" y="404" width="10" height="32" fill="var(--sunken)"/>
+      <rect x="218" y="440" width="28" height="32"/><circle cx="232" cy="456" r="9"/>
+      <rect x="246" y="440" width="28" height="32"/><circle cx="260" cy="456" r="9"/>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="7" fill="var(--ink3)" text-anchor="middle">
+      <text x="238" y="386" font-size="6">LINEN 3&#8242;-8&Prime;</text><text x="274" y="386">WH</text>
+      <text x="281" y="420" transform="rotate(90 281 420)" font-size="6">ROD</text>
+      <text x="232" y="437">W</text><text x="260" y="437">D</text>
+    </g>
+
+    <!-- ===== ROOM LABELS ===== -->
+    <g font-family="Archivo,sans-serif" font-weight="600" text-anchor="middle" fill="var(--ink)">
+      <text x="100" y="152" font-size="14" letter-spacing="1">LIVING</text>
+      <text x="226" y="152" font-size="14" letter-spacing="1">DINING</text>
+      <text x="412" y="30" font-size="14" letter-spacing="1">KITCHEN</text>
+      <text x="380" y="318" font-size="14" letter-spacing="1">MASTER</text>
+      <text x="70" y="320" font-size="13" letter-spacing=".6">BEDROOM 2</text>
+      <text x="70" y="455" font-size="13" letter-spacing=".6">BEDROOM 3</text>
+      <text x="436" y="408" font-size="10" letter-spacing=".6">WALK-IN</text>
+      <text x="338" y="404" font-size="10" letter-spacing=".6">M. BATH</text>
+      <text x="238" y="308" font-size="10" letter-spacing=".6">BATH 2</text>
+      <text x="240" y="414" font-size="10" letter-spacing=".6">LAUNDRY</text>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink2)" text-anchor="middle" font-weight="500">
+      <text x="100" y="166">14&#8242;-4&Prime; &times; 17&#8242;-0&Prime;</text>
+      <text x="226" y="166">9&#8242;-8&Prime; &times; 17&#8242;-0&Prime;</text>
+      <text x="412" y="44" font-size="8.5">14&#8242;-8&Prime; &times; 17&#8242;-0&Prime;</text>
+      <text x="380" y="332">15&#8242;-1&Prime; &times; 11&#8242;-6&Prime;</text>
+      <text x="70" y="334">11&#8242;-0&Prime; &times; 10&#8242;-9&Prime;</text>
+      <text x="70" y="469">11&#8242;-0&Prime; &times; 10&#8242;-1&Prime;</text>
+      <text x="436" y="421" font-size="8.5">6&#8242;-1&Prime;&times;9&#8242;-4&Prime;</text>
+      <text x="338" y="416" font-size="8.5">8&#8242;-6&Prime;&times;9&#8242;-4&Prime;</text>
+      <text x="238" y="320" font-size="7.5">5&#8242;-10&Prime;&times;8&#8242;-0&Prime;</text>
+      <text x="240" y="426" font-size="7">5&#8242;-10&Prime;&times;8&#8242;-5&Prime;</text>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="9.5" fill="var(--ink3)" text-anchor="middle">
+      <text x="190" y="360" transform="rotate(-90 190 360)">HALL 3&#8242;-6&Prime; &times; 21&#8242;-3&Prime;</text>
+      <text x="254" y="241" font-size="8.5">VESTIBULE</text>
+      <text x="254" y="252" font-size="7.5">5&#8242;-10&Prime;&times;4&#8242;-0&Prime;</text>
+    </g>
+
+    <!-- ===== FRONT PORCH ===== -->
+    <g>
+      <rect x="48" y="480" width="384" height="96" fill="var(--deck)" stroke="var(--deckline)" stroke-width="1.5"/>
+      <rect x="48" y="480" width="384" height="96" fill="url(#hatch)" opacity=".45"/>
+      <g fill="var(--deckline)"><rect x="44" y="568" width="10" height="10"/><rect x="426" y="568" width="10" height="10"/>
+        <rect x="235" y="568" width="10" height="10"/><rect x="139" y="568" width="10" height="10"/><rect x="331" y="568" width="10" height="10"/></g>
+      <text x="240" y="534" text-anchor="middle" font-family="Archivo,sans-serif" font-size="14" font-weight="600" fill="var(--ink2)" letter-spacing="1.2">COVERED FRONT PORCH</text>
+      <text x="240" y="550" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink3)">32&#8242;-0&Prime; &times; 8&#8242;-0&Prime; &middot; 256 sf</text>
+      <text x="240" y="598" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink3)">&#8595; SOUTH &mdash; driveway, 150&#8242; setback, Skylight Rd</text>
+    </g>
+    <!-- south-wall window tags, drawn over the porch so the fill doesn't bury them -->
+    <g font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--glass)" text-anchor="middle">
+      <text x="76" y="496">W11 high</text><text x="246" y="496">W12</text><text x="342" y="496">W13</text>
+    </g>
+
+    <!-- ===== DIMENSIONS ===== -->
+    <g stroke="var(--oxide)" stroke-width="1" fill="var(--oxide)" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="500">
+      <line x1="0" y1="-196" x2="480" y2="-196" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <line x1="0" y1="-202" x2="0" y2="-190" stroke-width=".7"/><line x1="480" y1="-202" x2="480" y2="-190" stroke-width=".7"/>
+      <text x="240" y="-204" text-anchor="middle" font-size="13">40&#8242;-0&Prime;</text>
+      <g stroke-width=".9">
+        <line x1="0" y1="-60" x2="18" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="18" y1="-60" x2="42" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="42" y1="-60" x2="54" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="54" y1="-60" x2="78" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="78" y1="-60" x2="90" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="90" y1="-60" x2="234" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="234" y1="-60" x2="246" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="246" y1="-60" x2="390" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="390" y1="-60" x2="402" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="402" y1="-60" x2="426" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="426" y1="-60" x2="438" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="438" y1="-60" x2="462" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="462" y1="-60" x2="480" y2="-60" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      </g>
+      <g stroke-width=".5" opacity=".55" stroke-dasharray="3 3">
+        <line x1="18" y1="-56" x2="18" y2="-2"/><line x1="42" y1="-56" x2="42" y2="-2"/><line x1="54" y1="-56" x2="54" y2="-2"/>
+        <line x1="78" y1="-56" x2="78" y2="-2"/><line x1="90" y1="-56" x2="90" y2="-2"/><line x1="234" y1="-56" x2="234" y2="-2"/>
+        <line x1="246" y1="-56" x2="246" y2="-2"/><line x1="390" y1="-56" x2="390" y2="-2"/><line x1="402" y1="-56" x2="402" y2="-2"/>
+        <line x1="426" y1="-56" x2="426" y2="-2"/><line x1="438" y1="-56" x2="438" y2="-2"/><line x1="462" y1="-56" x2="462" y2="-2"/>
+      </g>
+      <g text-anchor="middle" font-size="8">
+        <text x="9" y="-64">1&#8242;-6&Prime;</text><text x="48" y="-64">1&#8242;</text><text x="84" y="-64">1&#8242;</text>
+        <text x="240" y="-64">1&#8242;</text><text x="396" y="-64">1&#8242;</text><text x="432" y="-64">1&#8242;</text><text x="471" y="-64">1&#8242;-6&Prime;</text>
+      </g>
+      <g text-anchor="middle" font-size="8">
+        <text x="30" y="-76">2&#8242;-0&Prime;</text><text x="66" y="-76">2&#8242;-0&Prime;</text>
+        <text x="162" y="-76" font-size="9.5">12&#8242;-0&Prime;</text><text x="318" y="-76" font-size="9.5">12&#8242;-0&Prime;</text>
+        <text x="414" y="-76">2&#8242;-0&Prime;</text><text x="450" y="-76">2&#8242;-0&Prime;</text>
+      </g>
+      <line x1="-88" y1="0" x2="-88" y2="480" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <line x1="-94" y1="0" x2="-82" y2="0" stroke-width=".7"/><line x1="-94" y1="480" x2="-82" y2="480" stroke-width=".7"/>
+      <text x="-92" y="240" text-anchor="middle" font-size="13" transform="rotate(-90 -92 240)">40&#8242;-0&Prime;</text>
+      <g stroke-width=".9">
+        <line x1="-58" y1="8" x2="-58" y2="212" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="-58" y1="217" x2="-58" y2="472" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <g stroke-width=".6"><line x1="-64" y1="214.5" x2="-52" y2="214.5"/></g>
+      </g>
+      <text x="-62" y="110" text-anchor="middle" font-size="9.5" transform="rotate(-90 -62 110)">17&#8242;-0&Prime; GREAT ROOM</text>
+      <text x="-62" y="345" text-anchor="middle" font-size="9.5" transform="rotate(-90 -62 345)">21&#8242;-3&Prime; BEDROOM WING</text>
+      <g stroke-width=".9">
+        <line x1="8" y1="624" x2="164" y2="624" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="169" y1="624" x2="211" y2="624" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="216" y1="624" x2="286" y2="624" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="291" y1="624" x2="472" y2="624" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      </g>
+      <g text-anchor="middle" font-size="9">
+        <text x="86" y="620">13&#8242;-0&Prime; BEDS 2+3</text><text x="190" y="620">HALL</text><text x="251" y="620">5&#8242;-10&Prime;</text><text x="381" y="620">15&#8242;-1&Prime; MASTER WING</text>
+      </g>
+    </g>
+
+    <g transform="translate(548,140)">
+      <circle cx="0" cy="0" r="26" fill="none" stroke="var(--rule)" stroke-width="1"/>
+      <path d="M0,-20 L7,6 L0,0 L-7,6 Z" fill="var(--oxide)"/>
+      <text x="0" y="-26" text-anchor="middle" font-family="Archivo,sans-serif" font-size="12" font-weight="700" fill="var(--ink)">N</text>
+      <text x="0" y="42" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8.5" fill="var(--ink3)">SCALE 1/4&Prime;=1&#8242;</text>
+    </g>
+  </svg>
+  </div>
+  <div class="legend">
+    <span><i style="background:var(--wall)"></i>8&Prime; exterior wall</span>
+    <span><i style="background:var(--part)"></i>5&Prime; partition</span>
+    <span><i style="background:var(--glass-soft);border:1.5px solid var(--glass)"></i>glazing</span>
+    <span><i style="background:var(--deck)"></i>covered / unconditioned</span>
+    <span><i style="background:var(--oxide)"></i>dimension, swing &amp; post</span>
+  </div>
+</section>
+
+<section>
+  <h2>North Elevation &mdash; The Glass Wall</h2>
+  <div class="drawing elev">
+  <svg viewBox="-44 -34 568 268" xmlns="http://www.w3.org/2000/svg" role="img"
+       aria-label="North elevation: two 12 foot four-panel sliders flanked by pairs of tall windows">
+    <polygon points="0,80 240,0 480,80" fill="var(--sunken)" stroke="var(--wall)" stroke-width="2.5"/>
+    <rect x="0" y="80" width="480" height="108" fill="var(--sunken)" stroke="var(--wall)" stroke-width="2.5"/>
+    <line x1="-14" y1="80" x2="494" y2="80" stroke="var(--rule)" stroke-width="1" stroke-dasharray="5 4"/>
+    <polygon points="60,60 240,0 420,60" fill="var(--glass-soft)" stroke="var(--glass)" stroke-width="1.2" stroke-dasharray="4 3" opacity=".7"/>
+    <text x="240" y="44" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="var(--glass)">optional gable glazing</text>
+    <g stroke="var(--glass)" stroke-width="1" stroke-dasharray="4 3" fill="var(--glass-soft)" opacity=".65">
+      <rect x="90" y="88" width="144" height="18"/><rect x="246" y="88" width="144" height="18"/>
+    </g>
+    <text x="240" y="101" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--glass)">optional transoms</text>
+    <!-- the four 24x72 verticals, sill 8" -->
+    <g fill="var(--glass-soft)" stroke="var(--glass)" stroke-width="1.8">
+      <rect x="18" y="108" width="24" height="72"/><rect x="54" y="108" width="24" height="72"/>
+      <rect x="402" y="108" width="24" height="72"/><rect x="438" y="108" width="24" height="72"/>
+    </g>
+    <!-- the two sliders, 4 panels each -->
+    <g fill="var(--glass-soft)" stroke="var(--glass)" stroke-width="1.8">
+      <rect x="90" y="108" width="144" height="80"/>
+      <g stroke-width="1.2"><line x1="126" y1="108" x2="126" y2="188"/><line x1="162" y1="108" x2="162" y2="188"/><line x1="198" y1="108" x2="198" y2="188"/></g>
+    </g>
+    <g fill="var(--glass-soft)" stroke="var(--glass)" stroke-width="1.8">
+      <rect x="246" y="108" width="144" height="80"/>
+      <g stroke-width="1.2"><line x1="282" y1="108" x2="282" y2="188"/><line x1="318" y1="108" x2="318" y2="188"/><line x1="354" y1="108" x2="354" y2="188"/></g>
+    </g>
+    <line x1="4" y1="108" x2="476" y2="108" stroke="var(--oxide)" stroke-width=".7" stroke-dasharray="3 3"/>
+    <text x="240" y="103" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--oxide)">ALL HEADS 80&Prime;</text>
+    <g stroke="var(--glass)" stroke-width="1.4" fill="none">
+      <line x1="196" y1="170" x2="106" y2="170" marker-end="url(#sl)"/>
+      <line x1="284" y1="170" x2="374" y2="170" marker-end="url(#sl)"/>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink2)" text-anchor="middle" font-weight="500">
+      <text x="162" y="140">D1</text><text x="318" y="140">D2</text>
+    </g>
+    <g font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--ink3)" text-anchor="middle">
+      <text x="162" y="154">144&Prime;&times;80&Prime; &middot; 4-panel</text><text x="318" y="154">144&Prime;&times;80&Prime; &middot; 4-panel</text>
+      <text x="30" y="196">W1</text><text x="66" y="196">W2</text><text x="414" y="196">W3</text><text x="450" y="196">W4</text>
+      <text x="48" y="207">24&Prime;&times;72&Prime;</text><text x="432" y="207">24&Prime;&times;72&Prime;</text>
+    </g>
+    <g fill="var(--oxide)" opacity=".2"><rect x="78" y="80" width="12" height="108"/><rect x="234" y="80" width="12" height="108"/><rect x="390" y="80" width="12" height="108"/></g>
+    <g stroke="var(--oxide)" stroke-width="1.1" stroke-dasharray="5 4">
+      <line x1="84" y1="80" x2="84" y2="188"/><line x1="240" y1="80" x2="240" y2="188"/><line x1="396" y1="80" x2="396" y2="188"/>
+    </g>
+    <line x1="-24" y1="188" x2="504" y2="188" stroke="var(--wall)" stroke-width="3"/>
+    <line x1="-24" y1="180" x2="14" y2="180" stroke="var(--oxide)" stroke-width=".7" stroke-dasharray="3 3"/>
+    <text x="-26" y="178" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="var(--oxide)">sill 8&Prime;</text>
+    <g stroke="var(--oxide)" stroke-width=".9" fill="var(--oxide)" font-family="IBM Plex Mono,monospace" font-size="9">
+      <line x1="-20" y1="188" x2="-20" y2="80"/><line x1="-26" y1="188" x2="-14" y2="188"/><line x1="-26" y1="80" x2="-14" y2="80"/>
+      <text x="-24" y="140" text-anchor="middle" transform="rotate(-90 -24 140)">9&#8242;-0&Prime; plate</text>
+      <line x1="500" y1="188" x2="500" y2="0"/><line x1="494" y1="0" x2="506" y2="0"/>
+      <text x="504" y="94" text-anchor="middle" transform="rotate(-90 504 94)">15&#8242;-8&Prime; ridge @ 4:12</text>
+    </g>
+  </svg>
+  </div>
+  <div class="notes">
+    <div class="note warn">
+      <span class="flag">This wall no longer braces the building</span>
+      <p>8&#8242;-0&Prime; of solid wall in 40&#8242;-0&Prime;, and every piece of it is a post: two 1&#8242;-6&Prime; corner returns, three 1&#8242;-0&Prime; posts, and two 1&#8242;-0&Prime; slivers between the window pairs. There is no braced wall panel left here. All of the north&ndash;south shear has to come off the east and west walls and the roof diaphragm, and an engineer has to say so on paper before anyone frames it.</p>
+    </div>
+    <div class="note warn">
+      <span class="flag">Header deflection is the thing that fails</span>
+      <p>Multi-slide makers cap header deflection at <b>L/600, or &#8539;&Prime;, whichever is less</b> &mdash; far stiffer than the L/240 code asks for. Over a 12-foot opening that is the difference between doors that glide in year five and doors that bind once the roof loads up. Get the header sized to the door supplier's number.</p>
+    </div>
+    <div class="note">
+      <span class="flag">Everything lines up at 80&Prime;</span>
+      <p>Door heads, the 24&Prime;&times;72&Prime; verticals, the high strips, every window in the house &mdash; one head height, only the sills move. The verticals sill out at 8&Prime;, which is what makes the band read as continuous rather than as punched openings.</p>
+    </div>
+    <div class="note">
+      <span class="flag">All of it is safety glazing</span>
+      <p>An 8&Prime; sill puts every vertical inside the 18&Prime;-of-floor rule, and the sliders are glazed doors. Tempered throughout this wall, no exceptions and no value-engineering it out.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Window Schedule</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Tag</th><th class="num">Size</th><th class="num">Sill / head</th><th>Type &amp; location</th></tr></thead>
+    <tbody>
+      <tr class="grp"><td colspan="4">North wall &mdash; the glass band</td></tr>
+      <tr><td class="tag">W1</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, far west end. Tempered.</td></tr>
+      <tr><td class="tag">W2</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, 1&#8242;-0&Prime; off W1. Tempered.</td></tr>
+      <tr><td class="tag">W3</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, east pair. Tempered.</td></tr>
+      <tr><td class="tag">W4</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, far east end. Tempered.</td></tr>
+      <tr class="grp"><td colspan="4">West wall</td></tr>
+      <tr><td class="tag">W5</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, first one round the corner from W1. Tempered.</td></tr>
+      <tr><td class="tag">W6</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, living. Tempered.</td></tr>
+      <tr><td class="tag">W7</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, living. Tempered.</td></tr>
+      <tr><td class="tag">W8</td><td class="num">72&Prime;&times;24&Prime;</td><td class="num">56&Prime; / 80&Prime;</td><td><b>Horizontal</b> fixed at the stair. Starts at the bottom riser and dies into the bedroom partition.</td></tr>
+      <tr><td class="tag">W9</td><td class="num">48&Prime;&times;48&Prime;</td><td class="num">32&Prime; / 80&Prime;</td><td>Slider. <b>Bedroom 2 egress</b> &mdash; 6.7 sf net clear.</td></tr>
+      <tr><td class="tag">W10</td><td class="num">48&Prime;&times;48&Prime;</td><td class="num">32&Prime; / 80&Prime;</td><td>Slider. <b>Bedroom 3 egress</b> &mdash; 6.7 sf net clear.</td></tr>
+      <tr class="grp"><td colspan="4">South wall</td></tr>
+      <tr><td class="tag">W11</td><td class="num">72&Prime;&times;24&Prime;</td><td class="num">56&Prime; / 80&Prime;</td><td><b>Horizontal, high</b> in bedroom 3. Decorative &mdash; not the egress.</td></tr>
+      <tr><td class="tag">W12</td><td class="num">36&Prime;&times;24&Prime;</td><td class="num">56&Prime; / 80&Prime;</td><td>Awning above the washer and dryer.</td></tr>
+      <tr><td class="tag">W13</td><td class="num">24&Prime;&times;24&Prime;</td><td class="num">56&Prime; / 80&Prime;</td><td>Awning, obscure, inside the master shower. Tempered, tiled sloped sill.</td></tr>
+      <tr class="grp"><td colspan="4">East wall</td></tr>
+      <tr><td class="tag">W14</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, first one round the corner from W4. Tempered.</td></tr>
+      <tr><td class="tag">W15</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, kitchen. Tempered.</td></tr>
+      <tr><td class="tag">W16</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, kitchen. Tempered.</td></tr>
+      <tr><td class="tag">W17</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, master. Tempered.</td></tr>
+      <tr><td class="tag">W18</td><td class="num">36&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td><b>Double-hung, slides up.</b> The bigger one in the middle. <b>Master egress</b> &mdash; 7.3 sf net clear. Tempered.</td></tr>
+      <tr><td class="tag">W19</td><td class="num">24&Prime;&times;72&Prime;</td><td class="num">8&Prime; / 80&Prime;</td><td>Fixed vertical, master. Tempered.</td></tr>
+      <tr class="total"><td class="name" colspan="2">19 windows + 2 slider units</td><td class="num">388 sf</td><td>24% window-to-floor. 208 sf of it on the north wall.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="disclaimer">Every bedroom has a compliant egress opening: W9, W10 and W18. The two high horizontals (W8, W11) and the small awnings sill at 56&Prime;, well above the 44&Prime; egress limit, so they do not count &mdash; deliberate, since both rooms already have one. Tempered required in and within 24&Prime; of a door, in the shower wall, and in any pane within 18&Prime; of the floor, which covers all thirteen 24&Prime;&times;72&Prime; units.</p>
+</section>
+
+<section>
+  <h2>Room Schedule</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr>
+      <th>Room</th><th class="num">Clear dimensions</th><th class="num">Area</th><th>Notes</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="name">Great room</td><td class="num">38&#8242;-8&Prime; &times; 17&#8242;-0&Prime;</td><td class="num">657 sf</td><td>Full width, no columns. Glass on three sides at the north end.</td></tr>
+      <tr class="zone"><td class="name">Living zone</td><td class="num">14&#8242;-4&Prime; &times; 17&#8242;-0&Prime;</td><td class="num">244 sf</td><td>Less the stair, 206 sf of open floor. W1, W2 and the west trio.</td></tr>
+      <tr class="zone"><td class="name">Dining zone</td><td class="num">9&#8242;-8&Prime; &times; 17&#8242;-0&Prime;</td><td class="num">164 sf</td><td>Under D1's east end and D2. Opens onto the middle of the deck.</td></tr>
+      <tr class="zone"><td class="name">Kitchen zone</td><td class="num">14&#8242;-8&Prime; &times; 17&#8242;-0&Prime;</td><td class="num">249 sf</td><td>Island 4&#8242;-0&Prime;&times;7&#8242;-4&Prime;, seats 3. East run cut to 5&#8242;-2&Prime; for the window trio; dishwasher moved to the south run beside the range.</td></tr>
+      <tr class="zone"><td class="name">Stair</td><td class="num">3&#8242;-0&Prime; &times; 12&#8242;-6&Prime;</td><td class="num">38 sf</td><td>16 risers at 7&frac12;&Prime;. Rises west to east under W8.</td></tr>
+      <tr><td class="name">Master bedroom</td><td class="num">15&#8242;-1&Prime; &times; 11&#8242;-6&Prime;</td><td class="num">173 sf</td><td>King with 4&#8242;-2&Prime; at the foot. Three windows on the east wall, W18 in the middle opens.</td></tr>
+      <tr><td class="name">Master bath</td><td class="num">8&#8242;-6&Prime; &times; 9&#8242;-4&Prime;</td><td class="num">79 sf</td><td>Toilet east, 5&#8242; double vanity west, 6&#8242;&times;4&#8242; shower south. 50&Prime; clear in front of the toilet.</td></tr>
+      <tr><td class="name">Walk-in closet</td><td class="num">6&#8242;-1&Prime; &times; 9&#8242;-4&Prime;</td><td class="num">57 sf</td><td>Rod both long walls, 16 lf, 2&#8242;-1&Prime; aisle, end shelving.</td></tr>
+      <tr><td class="name">Master vestibule</td><td class="num">5&#8242;-10&Prime; &times; 4&#8242;-0&Prime;</td><td class="num">23 sf</td><td>Keeps the master door off the great room.</td></tr>
+      <tr><td class="name">Bedroom 2</td><td class="num">11&#8242;-0&Prime; &times; 10&#8242;-9&Prime;</td><td class="num">118 sf</td><td>Plus 6&#8242;&times;2&#8242; reach-in. The stair runs above its north wall.</td></tr>
+      <tr><td class="name">Bedroom 3</td><td class="num">11&#8242;-0&Prime; &times; 10&#8242;-1&Prime;</td><td class="num">111 sf</td><td>Plus 6&#8242;&times;2&#8242; reach-in. Egress west, high strip south.</td></tr>
+      <tr><td class="name">Bath 2 (hall)</td><td class="num">5&#8242;-10&Prime; &times; 8&#8242;-0&Prime;</td><td class="num">47 sf</td><td>5&#8242; tub, 4&#8242;-6&Prime; vanity, toilet on the wet wall, 10&Prime; towel tower.</td></tr>
+      <tr><td class="name">Laundry / mud</td><td class="num">5&#8242;-10&Prime; &times; 8&#8242;-5&Prime;</td><td class="num">49 sf</td><td>3&#8242;-8&Prime; linen closet on the north wall, water heater in the corner beside it, W/D on the outside wall.</td></tr>
+      <tr><td class="name">Hall</td><td class="num">3&#8242;-6&Prime; &times; 21&#8242;-3&Prime;</td><td class="num">74 sf</td><td>Runs to D1. Front door swings west, clear to the mud room.</td></tr>
+      <tr><td class="name">Closets (2)</td><td class="num">6&#8242;-0&Prime; &times; 2&#8242;-0&Prime; ea.</td><td class="num">24 sf</td><td>Bypass doors, clear of both bedroom door swings.</td></tr>
+      <tr class="total"><td class="name">Net finished, main level</td><td class="num">&mdash;</td><td class="num">1,412 sf</td><td>1,600 sf gross &minus; 188 sf of wall and partition.</td></tr>
+      <tr><td class="name">Covered back deck</td><td class="num">40&#8242;-0&Prime; &times; 12&#8242;-0&Prime;</td><td class="num">480 sf</td><td>Unconditioned.</td></tr>
+      <tr><td class="name">Covered front porch</td><td class="num">32&#8242;-0&Prime; &times; 8&#8242;-0&Prime;</td><td class="num">256 sf</td><td>Unconditioned.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>Door Schedule</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Tag</th><th class="num">Size</th><th>Type &amp; location</th></tr></thead>
+    <tbody>
+      <tr><td class="tag">D1</td><td class="num">144&Prime; &times; 80&Prime;</td><td>4-panel multi-slide, 36&Prime; panels. North wall. <b>Stacks west</b>, 9&#8242;-0&Prime; clear. Sits on the hall.</td></tr>
+      <tr><td class="tag">D2</td><td class="num">144&Prime; &times; 80&Prime;</td><td>4-panel multi-slide, 36&Prime; panels. North wall. <b>Stacks east</b>, 9&#8242;-0&Prime; clear.</td></tr>
+      <tr><td class="tag">D3</td><td class="num">36&Prime; &times; 80&Prime;</td><td>Insulated half-lite entry. <b>Hinged west</b>, swings in flat to the wall so the mud room path stays clear.</td></tr>
+      <tr><td class="tag">D4</td><td class="num">32&Prime; &times; 80&Prime;</td><td>Master bedroom, off the vestibule. Solid core.</td></tr>
+      <tr><td class="tag">D5</td><td class="num">32&Prime; &times; 80&Prime;</td><td>Bedroom 2, off hall. Swings in against the north wall.</td></tr>
+      <tr><td class="tag">D6</td><td class="num">32&Prime; &times; 80&Prime;</td><td>Bedroom 3, off hall. Swings in against the north wall.</td></tr>
+      <tr><td class="tag">D7</td><td class="num">32&Prime; &times; 80&Prime;</td><td>Bath 2, off hall. Clear of the vanity and toilet.</td></tr>
+      <tr><td class="tag">D8</td><td class="num">32&Prime; &times; 80&Prime;</td><td>Laundry / mud &mdash; <b>pocket</b>, slides south.</td></tr>
+      <tr><td class="tag">D9</td><td class="num">32&Prime; &times; 80&Prime;</td><td>Walk-in closet &mdash; <b>pocket</b>, slides east.</td></tr>
+      <tr><td class="tag">D10</td><td class="num">32&Prime; &times; 80&Prime;</td><td>Master bath &mdash; <b>pocket</b>, slides east.</td></tr>
+      <tr><td class="tag">D11</td><td class="num">72&Prime; &times; 80&Prime;</td><td>Bypass closet doors &mdash; bedrooms 2 and 3 (2 sets).</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>Build Notes &mdash; This Site</h2>
+  <div class="notes">
+    <div class="note warn">
+      <span class="flag">Lateral bracing has to be solved on paper</span>
+      <p>Between the glass wall on the north and the stair opening in the floor above, this building has very little wall left to brace itself. The east and west walls now carry it. Get that engineered before the post layout is ordered &mdash; it is the one item on this sheet that can force the plan to change.</p>
+    </div>
+    <div class="note warn">
+      <span class="flag">The stair changes the structure</span>
+      <p>A second storey means a real floor system and load paths this post-frame shell does not have. Decide how far the upper level reaches: over the bedroom wing only, leaving the great room open to the ridge, or across the whole footprint. That answer sets the columns, the footings, and whether the north wall can stay a non-bearing gable end.</p>
+    </div>
+    <div class="note">
+      <span class="flag">The kitchen sink lost its window</span>
+      <p>The east-wall trio occupies the first 9 feet of that wall, which is where the sink run was. The run is now 5&#8242;-2&Prime; starting south of the windows, and the sink sits under upper cabinets instead of glass, with the corner windows two feet to its left. If a window over the sink matters more than the third vertical, say so and W16 comes out.</p>
+    </div>
+    <div class="note">
+      <span class="flag">Floor-level glass on the uphill side</span>
+      <p>Thirteen windows now sill at 8&Prime;, most of them on the uphill north and side walls. Set the slab edge high, cut the bank back, and run the swale and French drain along the north side before anything else goes in.</p>
+    </div>
+    <div class="note">
+      <span class="flag">Recess the slab at D1 and D2</span>
+      <p>Multi-slide units want a low or flush sill, and that recess cannot be added after the pour. Two 12-foot recesses, dead flat, formed with the thickened edge.</p>
+    </div>
+    <div class="note">
+      <span class="flag">Glazing ratio</span>
+      <p>24% window-to-floor. That will not pass on the prescriptive path &mdash; plan on the performance or UA-alternative route, and put the money into the two slider units where 160 sf of the 388 sits.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="titleblock">
+    <div class="tb"><span>Project</span><b>40&times;40 Barndominium</b></div>
+    <div class="tb"><span>Site</span><b>Aulbach Lot #10</b></div>
+    <div class="tb"><span>Parcel</span><b>88-14-07-000-<br>009.010-013</b></div>
+    <div class="tb"><span>Address</span><b>Skylight Rd<br>Salem, IN 47167</b></div>
+    <div class="tb"><span>Sheet</span><b>A-1 &middot; Main level</b></div>
+    <div class="tb"><span>Revision</span><b>6 &mdash; window<br>schedule</b></div>
+  </div>
+  <p class="disclaimer">Conceptual space plan, not construction documents. Dimensions are clear finished-face to finished-face at 8&Prime; exterior walls and 5&Prime; partitions. A designer or engineer sets final wall assemblies, lateral bracing, the second-floor framing, header stiffness, post sizing, footing depth, energy compliance and local Washington County review. Verify manufacturer rough openings before framing &mdash; sizes given are unit sizes, and R.O. typically runs about 1&Prime; larger each way.</p>
+</section>
+
+</div>
